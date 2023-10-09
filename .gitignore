@@ -1,5 +1,24 @@
-# Ignore Gradle project-specific cache directory
-.gradle
+# IntelliJ IDEA specific files/directories
+.idea/
+*.iws
+*.iml
+*.ipr
 
-# Ignore Gradle build output directory
-build
+# Gradle specific
+.gradle/
+build/
+gradlew
+gradlew.bat
+gradle-wrapper.jar
+
+# Scala build artifacts
+*.class
+*.object
+
+
+.DS_Store  # macOS
+
+# Common directories for generated files or other files you don't want to commit
+*.log
+*.bak
+*.swp

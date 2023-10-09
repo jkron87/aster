@@ -19,7 +19,7 @@ services:
       context: ""
       dockerfile: Dockerfile
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/mydatabase?useSSL=false
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/mydatabase?allowPublicKeyRetrieval=true&useSSL=false
       SPRING_DATASOURCE_USERNAME: user
       SPRING_DATASOURCE_PASSWORD: userpassword
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
