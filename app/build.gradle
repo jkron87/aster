@@ -3,6 +3,8 @@ plugins {
     id 'application'
     id 'org.springframework.boot' version '2.6.0'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'org.flywaydb.flyway' version '7.11.2'
+
 }
 
 repositories {
@@ -21,6 +23,9 @@ dependencies {
     implementation 'com.typesafe.slick:slick_2.13:3.3.3'
     implementation 'com.typesafe.slick:slick-hikaricp_2.13:3.3.3'
     implementation 'mysql:mysql-connector-java:8.0.25'
+
+    // Flyway
+    implementation 'org.flywaydb:flyway-core:7.11.2'
 
     // Existing dependencies
     implementation 'com.google.guava:guava:31.1-jre'

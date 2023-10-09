@@ -28,5 +28,13 @@ services:
     depends_on:
       - db
 
+  flyway:
+    image: flyway/flyway
+    command: -url=jdbc:mysql://db:3306/mydatabase?allowPublicKeyRetrieval=true&useSSL=false -user=user -password=userpassword migrate
+    volumes:
+      - ./db/migrations:/flyway/sql
+    depends_on:
+      - db
+
 volumes:
   mysql-data:
