@@ -56,7 +56,6 @@ task dbGenerateSlick(type: JavaExec) {
 }
 
 
-
 testing {
     suites {
         test {

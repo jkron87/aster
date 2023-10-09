@@ -1,6 +1,7 @@
 package aster.controller
 
-import aster.model.dto.MeetingResponse
+import aster.model.dto.Meeting
+import aster.model.http.HttpMeeting
 import aster.service.MeetingService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation._
@@ -13,19 +14,14 @@ import scala.concurrent.ExecutionContext
 @RequestMapping(Array("/meetings"))
 class MeetingController @Autowired()(meetingService: MeetingService)(implicit ec: ExecutionContext) {
 
-  //  @PostMapping
-  //  def scheduleMeeting(@RequestBody meeting: MeetingRow): Future[String] = {
-  //    meetingService.insert(meeting).map { numRows =>
-  //      if (numRows > 0) {
-  //        "Meeting scheduled successfully!"
-  //      } else {
-  //        "Failed to schedule meeting."
-  //      }
-  //    }
-  //  }
+  @PostMapping
+  def scheduleMeeting(@RequestBody meeting: HttpMeeting) = {
+    meetingService.insert(Meeting.fromHTTP(meeting))
+  }
+
   @GetMapping
-  @ResponseBody // Add this annotation
-  def getMeetings(): util.List[MeetingResponse] = {
-    meetingService.findAll().map(MeetingResponse.fromDTO).asJava
+  @ResponseBody
+  def getMeetings(): util.List[HttpMeeting] = {
+    meetingService.findAll().map(HttpMeeting.fromDTO).asJava
   }
 }
