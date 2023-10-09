@@ -16,7 +16,7 @@ services:
 
   app:
     build:
-      context: ""
+      context: .
       dockerfile: Dockerfile
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/mydatabase?allowPublicKeyRetrieval=true&useSSL=false
@@ -25,14 +25,6 @@ services:
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
     ports:
       - "8080:8080"
-    depends_on:
-      - db
-
-  flyway:
-    image: flyway/flyway
-    command: -url=jdbc:mysql://db:3306/mydatabase?allowPublicKeyRetrieval=true&useSSL=false -user=user -password=userpassword migrate
-    volumes:
-      - ./db/migrations:/flyway/sql
     depends_on:
       - db
 

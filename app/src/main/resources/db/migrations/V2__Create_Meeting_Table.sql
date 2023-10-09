@@ -1,0 +1,6 @@
+CREATE TABLE meeting (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    time TIMESTAMP NOT NULL,
+    participants TEXT NOT NULL,
+    location VARCHAR(255) NOT NULL
+);
