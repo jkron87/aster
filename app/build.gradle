@@ -21,6 +21,7 @@ dependencies {
 
     // Slick and MySQL dependencies
     implementation 'com.typesafe.slick:slick_2.13:3.3.3'
+    implementation 'com.typesafe.slick:slick-codegen_2.13:3.3.3'
     implementation 'com.typesafe.slick:slick-hikaricp_2.13:3.3.3'
     implementation 'mysql:mysql-connector-java:8.0.25'
 
@@ -36,6 +37,25 @@ dependencies {
     testRuntimeOnly 'org.scala-lang.modules:scala-xml_2.13:1.2.0'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
+
+task dbGenerateSlick(type: JavaExec) {
+    group 'db'
+    description 'Generates Slick scala source code for the database schema in the com.aster.data package'
+
+    main = "slick.codegen.SourceCodeGenerator"
+    classpath = sourceSets.main.runtimeClasspath
+    args = [
+            "slick.jdbc.MySQLProfile",
+            "com.mysql.cj.jdbc.Driver",
+            "jdbc:mysql://localhost:3306/mydatabase?allowPublicKeyRetrieval=true&useSSL=false",
+            "${project.rootDir}/app/src/main/scala",
+            "aster.dao.generated",
+            "user",
+            "userpassword"
+    ]
+}
+
+
 
 testing {
     suites {
