@@ -42,7 +42,7 @@ A RESTful API designed for managing meetings and meeting notes, built with Scala
 ### Meeting Notes
 
 - `POST /meeting-notes`: Add notes associated with a specific meeting.
-- `GET /meeting-notes`: Retrieve notes based on a meeting ID.
+- `GET /meeting-notes/{id}`: Retrieve notes based on a meeting ID.
 
 ## Database Configuration
 
