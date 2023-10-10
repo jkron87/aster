@@ -12,9 +12,8 @@ import scala.jdk.CollectionConverters.IterableHasAsJava
 class MeetingNoteController @Autowired()(meetingNoteService: MeetingNoteService) {
 
   @PostMapping
-  def addMeetingNotes(@RequestBody note: HttpMeetingNote): String = {
+  def addMeetingNotes(@RequestBody note: HttpMeetingNote): Int = {
     meetingNoteService.insert(HttpMeetingNote.toDTO(note))
-    "Notes added successfully!"
   }
 
   @GetMapping(Array("/{meetingId}"))
