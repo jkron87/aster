@@ -26,6 +26,11 @@ dependencies {
     implementation 'mysql:mysql-connector-java:8.0.25'
     implementation 'org.flywaydb:flyway-core:7.11.2'
 
+
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'io.jsonwebtoken:jjwt:0.9.1'
+
+
     implementation 'com.google.guava:guava:31.1-jre'
 
     // Test dependencies
