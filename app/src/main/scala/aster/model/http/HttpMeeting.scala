@@ -3,14 +3,13 @@ package aster.model.http
 import aster.model.dto.MeetingDto
 
 import java.text.SimpleDateFormat
-import java.util.{List => JList}
 import scala.beans.BeanProperty
 import scala.collection.JavaConverters._
 
 case class HttpMeeting(
                         @BeanProperty id: Int,
                         @BeanProperty time: String,
-                        @BeanProperty participants: JList[Int],
+                        @BeanProperty participants: java.util.List[Int],
                         @BeanProperty location: String
                       )
 

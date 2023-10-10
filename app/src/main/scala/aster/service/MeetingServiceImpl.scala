@@ -9,11 +9,22 @@ import org.springframework.stereotype.Service
 @Service
 class MeetingServiceImpl @Autowired()(meetingDAO: MeetingDAO, meetingParticipantDAO: MeetingParticipantDAO) extends MeetingService {
 
+  /**
+   * Insert a new meeting along with its participants into the database.
+   *
+   * @param meeting the meeting details to be inserted.
+   * @return the generated ID of the inserted meeting.
+   */
   def insert(meeting: MeetingDto): Int = {
     val meetingId: Int = meetingDAO.insertWithParticipants(MeetingRow.apply(meeting.id, meeting.time, meeting.location), meeting.participants)
     meetingId
   }
 
+  /**
+   * Fetch all meetings from the database along with their participants.
+   *
+   * @return a sequence of MeetingDto representing all meetings and their participants.
+   */
   def findAll(): Seq[MeetingDto] = {
     val meetings = meetingDAO.findAll()
 
