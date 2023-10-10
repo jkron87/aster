@@ -1,11 +1,11 @@
 package aster.security
 
-import javax.servlet.http.{HttpServletRequest, HttpServletResponse}
-import javax.servlet.FilterChain
-import scala.collection.immutable.List
-import org.springframework.web.filter.OncePerRequestFilter
-import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.web.filter.OncePerRequestFilter
+
+import javax.servlet.FilterChain
+import javax.servlet.http.{HttpServletRequest, HttpServletResponse}
 
 class JwtFilter extends OncePerRequestFilter {
 

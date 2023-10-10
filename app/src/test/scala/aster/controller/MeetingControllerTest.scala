@@ -36,7 +36,7 @@ class MeetingControllerTest {
 
     when(meetingService.findAll()).thenReturn(meetingsList)
 
-    mockMvc.perform(get("/meetings"))
+    mockMvc.perform(get("/meetings").header("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0QHRlc3QuY29tIn0.1RWrbR8soNgIA3oclRrNmdgDtunbITePFv6Bq3AqRDbHXGAbyA37p2oIFuK5obahMyiLBnGceUcMYXC7WI-Ijw"))
       .andExpect(status().isOk)
       .andExpect(content().json("""[{"id":1,"time":"2023-10-09 15:30:45","participants":[1],"location":"Chicago"}]"""))
   }
@@ -48,9 +48,25 @@ class MeetingControllerTest {
     when(meetingService.insert(MeetingDto.fromHTTP(meeting))).thenReturn(1)
 
     mockMvc.perform(post("/meetings")
+      .header("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0QHRlc3QuY29tIn0.1RWrbR8soNgIA3oclRrNmdgDtunbITePFv6Bq3AqRDbHXGAbyA37p2oIFuK5obahMyiLBnGceUcMYXC7WI-Ijw")
       .contentType(MediaType.APPLICATION_JSON)
       .content("""{"id":1,"time":"2023-10-09 15:30:45","participants":[1],"location":"Chicago"}"""))
       .andExpect(status().isOk)
   }
+
+  @Test
+  def testGetMeetingsWithoutToken(): Unit = {
+    mockMvc.perform(get("/meetings"))
+      .andExpect(status().isForbidden)
+  }
+
+  @Test
+  def testScheduleMeetingWithoutToken(): Unit = {
+    mockMvc.perform(post("/meetings")
+      .contentType(MediaType.APPLICATION_JSON)
+      .content("""{"id":1,"time":"2023-10-09 15:30:45","participants":[1],"location":"Chicago"}"""))
+      .andExpect(status().isForbidden)
+  }
+
 
 }
