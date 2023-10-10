@@ -99,18 +99,19 @@ trait Tables {
   /** Entity class storing rows of table MeetingNote
    *  @param id Database column id SqlType(INT), AutoInc, PrimaryKey
    *  @param meetingId Database column meeting_id SqlType(INT)
-   *  @param text Database column text SqlType(TEXT) */
-  case class MeetingNoteRow(id: Int, meetingId: Int, text: String)
+   *  @param text Database column text SqlType(TEXT)
+   *  @param attachmentLocation Database column attachment_location SqlType(TEXT), Default(None) */
+  case class MeetingNoteRow(id: Int, meetingId: Int, text: String, attachmentLocation: Option[String] = None)
   /** GetResult implicit for fetching MeetingNoteRow objects using plain SQL queries */
-  implicit def GetResultMeetingNoteRow(implicit e0: GR[Int], e1: GR[String]): GR[MeetingNoteRow] = GR{
+  implicit def GetResultMeetingNoteRow(implicit e0: GR[Int], e1: GR[String], e2: GR[Option[String]]): GR[MeetingNoteRow] = GR{
     prs => import prs._
-    MeetingNoteRow.tupled((<<[Int], <<[Int], <<[String]))
+    MeetingNoteRow.tupled((<<[Int], <<[Int], <<[String], <<?[String]))
   }
   /** Table description of table meeting_note. Objects of this class serve as prototypes for rows in queries. */
   class MeetingNote(_tableTag: Tag) extends profile.api.Table[MeetingNoteRow](_tableTag, Some("mydatabase"), "meeting_note") {
-    def * = (id, meetingId, text) <> (MeetingNoteRow.tupled, MeetingNoteRow.unapply)
+    def * = (id, meetingId, text, attachmentLocation) <> (MeetingNoteRow.tupled, MeetingNoteRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
-    def ? = ((Rep.Some(id), Rep.Some(meetingId), Rep.Some(text))).shaped.<>({r=>import r._; _1.map(_=> MeetingNoteRow.tupled((_1.get, _2.get, _3.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+    def ? = ((Rep.Some(id), Rep.Some(meetingId), Rep.Some(text), attachmentLocation)).shaped.<>({r=>import r._; _1.map(_=> MeetingNoteRow.tupled((_1.get, _2.get, _3.get, _4)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
     /** Database column id SqlType(INT), AutoInc, PrimaryKey */
     val id: Rep[Int] = column[Int]("id", O.AutoInc, O.PrimaryKey)
@@ -118,6 +119,8 @@ trait Tables {
     val meetingId: Rep[Int] = column[Int]("meeting_id")
     /** Database column text SqlType(TEXT) */
     val text: Rep[String] = column[String]("text")
+    /** Database column attachment_location SqlType(TEXT), Default(None) */
+    val attachmentLocation: Rep[Option[String]] = column[Option[String]]("attachment_location", O.Default(None))
 
     /** Foreign key referencing Meeting (database name meeting_note_ibfk_1) */
     lazy val meetingFk = foreignKey("meeting_note_ibfk_1", meetingId, Meeting)(r => r.id, onUpdate=ForeignKeyAction.Restrict, onDelete=ForeignKeyAction.Restrict)

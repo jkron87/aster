@@ -1,20 +1,24 @@
 package aster.controller
 
+import aster.model.http.HttpMeetingNote
+import aster.service.MeetingNoteService
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation._
+
+import scala.jdk.CollectionConverters.IterableHasAsJava
 
 @RestController
 @RequestMapping(Array("/meeting-notes"))
-class MeetingNotesController {
+class MeetingNoteController @Autowired()(meetingNoteService: MeetingNoteService) {
 
   @PostMapping
-  def addMeetingNotes(): String = {
-    // Logic to add notes associated with a specific meeting.
+  def addMeetingNotes(@RequestBody note: HttpMeetingNote): String = {
+    meetingNoteService.insert(HttpMeetingNote.toDTO(note))
     "Notes added successfully!"
   }
 
-  @GetMapping
-  def getMeetingNotes(): String = {
-    // Logic to retrieve notes based on a meeting ID.
-    "Meeting notes based on ID."
+  @GetMapping(Array("/{meetingId}"))
+  def getMeetingNotes(@PathVariable meetingId: Int) = {
+    meetingNoteService.findByMeetingId(meetingId).map(HttpMeetingNote.fromDTO).asJava
   }
 }
