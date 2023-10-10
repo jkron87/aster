@@ -1,33 +1,26 @@
 package aster.service
 
-import aster.dao.MeetingDAO
-import aster.dao.generated.Tables.MeetingRow
-import aster.model.dto.Meeting
+import aster.dao.{MeetingDAO, MeetingParticipantDAO}
+import aster.dao.generated.Tables._
+import aster.model.dto.MeetingDto
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
-class MeetingServiceImpl @Autowired()(meetingDAO: MeetingDAO) extends MeetingService {
+class MeetingServiceImpl @Autowired()(meetingDAO: MeetingDAO, meetingParticipantDAO: MeetingParticipantDAO) extends MeetingService {
 
-  def insert(meeting: Meeting): Int = {
-    meetingDAO.insert(MeetingRow.apply(meeting.id, meeting.time, meeting.participants, meeting.location))
+  def insert(meeting: MeetingDto): Int = {
+    val meetingId: Int = meetingDAO.insertWithParticipants(MeetingRow.apply(meeting.id, meeting.time, meeting.location), meeting.participants)
+    meetingId
   }
 
-  def update(meeting: Meeting): Int = {
+  def findAll(): Seq[MeetingDto] = {
+    val meetings = meetingDAO.findAll()
 
-    meetingDAO.update(MeetingRow.apply(meeting.id, meeting.time, meeting.participants, meeting.location))
-  }
-
-  def delete(id: Int): Int = {
-    meetingDAO.delete(id)
-  }
-
-  def findById(id: Int): Option[Meeting] = {
-    meetingDAO.findById(id).map(Meeting.fromRow)
-  }
-
-  def findAll(): Seq[Meeting] = {
-    meetingDAO.findAll().map(Meeting.fromRow)
+    meetings.map { meeting =>
+      val participants = meetingParticipantDAO.findAllForMeeting(meeting.id).map(_.userId)
+      MeetingDto(meeting.id, meeting.time, participants, meeting.location)
+    }
   }
 
 }

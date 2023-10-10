@@ -1,6 +1,6 @@
 package aster.controller
 
-import aster.model.dto.Meeting
+import aster.model.dto.MeetingDto
 import aster.model.http.HttpMeeting
 import aster.service.MeetingService
 import org.springframework.beans.factory.annotation.Autowired
@@ -16,7 +16,7 @@ class MeetingController @Autowired()(meetingService: MeetingService)(implicit ec
 
   @PostMapping
   def scheduleMeeting(@RequestBody meeting: HttpMeeting) = {
-    meetingService.insert(Meeting.fromHTTP(meeting))
+    meetingService.insert(MeetingDto.fromHTTP(meeting))
   }
 
   @GetMapping

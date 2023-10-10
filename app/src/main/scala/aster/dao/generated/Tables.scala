@@ -73,26 +73,23 @@ trait Tables {
   /** Entity class storing rows of table Meeting
    *  @param id Database column id SqlType(INT), AutoInc, PrimaryKey
    *  @param time Database column time SqlType(TIMESTAMP)
-   *  @param participants Database column participants SqlType(TEXT)
    *  @param location Database column location SqlType(VARCHAR), Length(255,true) */
-  case class MeetingRow(id: Int, time: java.sql.Timestamp, participants: String, location: String)
+  case class MeetingRow(id: Int, time: java.sql.Timestamp, location: String)
   /** GetResult implicit for fetching MeetingRow objects using plain SQL queries */
   implicit def GetResultMeetingRow(implicit e0: GR[Int], e1: GR[java.sql.Timestamp], e2: GR[String]): GR[MeetingRow] = GR{
     prs => import prs._
-    MeetingRow.tupled((<<[Int], <<[java.sql.Timestamp], <<[String], <<[String]))
+    MeetingRow.tupled((<<[Int], <<[java.sql.Timestamp], <<[String]))
   }
   /** Table description of table meeting. Objects of this class serve as prototypes for rows in queries. */
   class Meeting(_tableTag: Tag) extends profile.api.Table[MeetingRow](_tableTag, Some("mydatabase"), "meeting") {
-    def * = (id, time, participants, location) <> (MeetingRow.tupled, MeetingRow.unapply)
+    def * = (id, time, location) <> (MeetingRow.tupled, MeetingRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
-    def ? = ((Rep.Some(id), Rep.Some(time), Rep.Some(participants), Rep.Some(location))).shaped.<>({r=>import r._; _1.map(_=> MeetingRow.tupled((_1.get, _2.get, _3.get, _4.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+    def ? = ((Rep.Some(id), Rep.Some(time), Rep.Some(location))).shaped.<>({r=>import r._; _1.map(_=> MeetingRow.tupled((_1.get, _2.get, _3.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
     /** Database column id SqlType(INT), AutoInc, PrimaryKey */
     val id: Rep[Int] = column[Int]("id", O.AutoInc, O.PrimaryKey)
     /** Database column time SqlType(TIMESTAMP) */
     val time: Rep[java.sql.Timestamp] = column[java.sql.Timestamp]("time")
-    /** Database column participants SqlType(TEXT) */
-    val participants: Rep[String] = column[String]("participants")
     /** Database column location SqlType(VARCHAR), Length(255,true) */
     val location: Rep[String] = column[String]("location", O.Length(255,varying=true))
   }
